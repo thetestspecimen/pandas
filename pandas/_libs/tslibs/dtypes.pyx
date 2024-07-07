@@ -346,8 +346,29 @@ cdef dict c_DEPR_ABBREVS = {
     "S": "s",
 }
 
+cdef dict c_DEPR_UNITS = {
+    "w": "W",
+    "d": "D",
+    "H": "h",
+    "MIN": "min",
+    "S": "s",
+    "MS": "ms",
+    "US": "us",
+    "NS": "ns",
+}
+
 cdef dict c_PERIOD_AND_OFFSET_DEPR_FREQSTR = {
     "w": "W",
+    "w-mon": "W-MON",
+    "w-tue": "W-TUE",
+    "w-wed": "W-WED",
+    "w-thu": "W-THU",
+    "w-fri": "W-FRI",
+    "w-sat": "W-SAT",
+    "w-sun": "W-SUN",
+    "d": "D",
+    "b": "B",
+    "c": "C",
     "MIN": "min",
 }
 
@@ -442,10 +463,6 @@ class Resolution(Enum):
         """
         cdef:
             str abbrev
-        if freq in {"T", "t", "L", "l", "U", "u", "N", "n"}:
-            raise ValueError(
-                f"Frequency \'{freq}\' is no longer supported."
-            )
         try:
             if freq in c_DEPR_ABBREVS:
                 abbrev = c_DEPR_ABBREVS[freq]

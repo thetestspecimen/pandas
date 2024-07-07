@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import (
+    Callable,
     Collection,
     Generator,
     Hashable,
@@ -12,7 +13,6 @@ from sys import getsizeof
 from typing import (
     TYPE_CHECKING,
     Any,
-    Callable,
     Literal,
     cast,
 )
@@ -1030,6 +1030,13 @@ class MultiIndex(Index):
     def nlevels(self) -> int:
         """
         Integer number of levels in this MultiIndex.
+
+        See Also
+        --------
+        MultiIndex.levels : Get the levels of the MultiIndex.
+        MultiIndex.codes : Get the codes of the MultiIndex.
+        MultiIndex.from_arrays : Convert arrays to MultiIndex.
+        MultiIndex.from_tuples : Convert list of tuples to MultiIndex.
 
         Examples
         --------
@@ -3899,8 +3906,11 @@ class MultiIndex(Index):
                 # have to insert into level
                 # must insert at end otherwise you have to recompute all the
                 # other codes
-                lev_loc = len(level)
-                level = level.insert(lev_loc, k)
+                if isna(k):  # GH 59003
+                    lev_loc = -1
+                else:
+                    lev_loc = len(level)
+                    level = level.insert(lev_loc, k)
             else:
                 lev_loc = level.get_loc(k)
 
